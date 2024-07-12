@@ -25,4 +25,4 @@ jobs:
     - name: Run the script
       run: python analyze_contributions.py
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
