@@ -3,6 +3,7 @@ name: Weekly Contributions
 on:
   schedule:
     - cron: '0 20 * * 0'  # runs at 20:00 every sunday
+  workflow_dispatch: # allows manual triggering
 
 jobs:
   build:
