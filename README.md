@@ -1,0 +1,1 @@
+# more detailed git stuff
