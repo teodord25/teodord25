@@ -44,11 +44,13 @@ name = "teodord25"
 url = f"{url_base}/repos/{user}/{name}/commits"
 response = requests.get(url, headers=HEADERS).json()
 # if status not 200 skip
+
 for commit in response:
     sha = commit["sha"]
     url = f"{url_base}/repos/{user}/{name}/commits/{sha}"
     response = requests.get(url, headers=HEADERS, allow_redirects=True).json()
     files = response["files"]
+
     for file in files:
         filename = file["filename"]
 
@@ -59,12 +61,19 @@ for commit in response:
 
         language = LANGUAGES[file_ext]
 
-        patch = file["patch"]
+        lines = file["patch"].split('\n')
 
-        added = sum(1 for line in patch.split('\n') if line.startswith('+') and not line.startswith('+++'))
-        removed = sum(1 for line in patch.split('\n') if line.startswith('-') and not line.startswith('---'))
+        added = sum(
+            1 for line in lines
+            if line.startswith('+') and not line.startswith('+++')
+        )
+        removed = sum(
+            1 for line in lines
+            if line.startswith('-') and not line.startswith('---')
+        )
 
         lines_changed = added + removed
+
         if language not in summary:
             summary[language] = {
                 "lines_changed": lines_changed,
