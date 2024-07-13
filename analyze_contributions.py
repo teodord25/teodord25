@@ -23,6 +23,9 @@ LANGUAGES = {
     '.java': 'Java',
 }
 
+summary = {
+}
+
 url_base = "https://api.github.com"
 user = "teodord25"
 repo_names = []
@@ -38,7 +41,6 @@ while True:
     page += 1
 
 name = "teodord25"
-print(f"Repo: {name}")
 url = f"{url_base}/repos/{user}/{name}/commits"
 response = requests.get(url, headers=HEADERS).json()
 # if status not 200 skip
@@ -48,7 +50,26 @@ for commit in response:
     response = requests.get(url, headers=HEADERS, allow_redirects=True).json()
     files = response["files"]
     for file in files:
-        print("File: " + file["filename"])
-        print("Diff: \n" + file["patch"])
+        filename = file["filename"]
 
-    print("\n")
+        file_ext = os.path.splitext(filename)[1]
+
+        if file_ext not in LANGUAGES or file_ext == ".md":  # ignore markdown files
+            continue
+
+        language = LANGUAGES[file_ext]
+
+        patch = file["patch"]
+
+        added = sum(1 for line in patch.split('\n') if line.startswith('+') and not line.startswith('+++'))
+        removed = sum(1 for line in patch.split('\n') if line.startswith('-') and not line.startswith('---'))
+
+        lines_changed = added + removed
+        if language not in summary:
+            summary[language] = {
+                "lines_changed": lines_changed,
+            }
+        else:
+            summary[language]["lines_changed"] += lines_changed
+
+print(summary)
