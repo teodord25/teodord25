@@ -40,45 +40,48 @@ while True:
         repo_names.append(repo["name"])
     page += 1
 
-name = "teodord25"
-url = f"{url_base}/repos/{user}/{name}/commits"
-response = requests.get(url, headers=HEADERS).json()
-# if status not 200 skip
+for repo_name in repo_names:
+    url = f"{url_base}/repos/{user}/{repo_name}/commits"
+    response = requests.get(url, headers=HEADERS).json()
 
-for commit in response:
-    sha = commit["sha"]
-    url = f"{url_base}/repos/{user}/{name}/commits/{sha}"
-    response = requests.get(url, headers=HEADERS, allow_redirects=True).json()
-    files = response["files"]
+    if not response or response.status_code != 200:
+        print(f"Skipping {repo_name} {response.status_code}")
+        continue
 
-    for file in files:
-        filename = file["filename"]
+    for commit in response:
+        sha = commit["sha"]
+        url = f"{url_base}/repos/{user}/{repo_name}/commits/{sha}"
+        response = requests.get(url, headers=HEADERS, allow_redirects=True).json()
+        files = response["files"]
 
-        file_ext = os.path.splitext(filename)[1]
+        for file in files:
+            filename = file["filename"]
 
-        if file_ext not in LANGUAGES or file_ext == ".md":  # ignore markdown files
-            continue
+            file_ext = os.path.splitext(filename)[1]
 
-        language = LANGUAGES[file_ext]
+            if file_ext not in LANGUAGES or file_ext == ".md":  # ignore markdown files
+                continue
 
-        lines = file["patch"].split('\n')
+            language = LANGUAGES[file_ext]
 
-        added = sum(
-            1 for line in lines
-            if line.startswith('+') and not line.startswith('+++')
-        )
-        removed = sum(
-            1 for line in lines
-            if line.startswith('-') and not line.startswith('---')
-        )
+            lines = file["patch"].split('\n')
 
-        lines_changed = added + removed
+            added = sum(
+                1 for line in lines
+                if line.startswith('+') and not line.startswith('+++')
+            )
+            removed = sum(
+                1 for line in lines
+                if line.startswith('-') and not line.startswith('---')
+            )
 
-        if language not in summary:
-            summary[language] = {
-                "lines_changed": lines_changed,
-            }
-        else:
-            summary[language]["lines_changed"] += lines_changed
+            lines_changed = added + removed
+
+            if language not in summary:
+                summary[language] = {
+                    "lines_changed": lines_changed,
+                }
+            else:
+                summary[language]["lines_changed"] += lines_changed
 
 print(summary)
