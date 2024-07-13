@@ -6,6 +6,21 @@ HEADERS = {
     'Accept': 'application/vnd.github+json'
 }
 
+LANGUAGES = {
+    '.rs': 'Rust',
+    '.go': 'Go',
+    '.gleam': 'Gleam',
+    '.html': 'HTML',
+    '.css': 'CSS',
+    '.py': 'Python',
+    '.kts': 'Kotlin',
+    '.kt': 'Kotlin',
+    '.cpp': 'C++',
+    '.c': 'C',
+    '.js': 'JavaScript',
+    '.java': 'Java',
+}
+
 url_base = "https://api.github.com"
 user = "teodord25"
 repo_names = []
