@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+from typing import List
 import requests
 import os
 
@@ -23,67 +25,93 @@ LANGUAGES = {
     '.java': 'Java',
 }
 
-summary = {
-}
 
-date_seven_days_ago = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ')
+def compute_summary(summary, language, lines):
+    added = sum(
+        1 for line in lines
+        if line.startswith('+') and not line.startswith('+++')
+    )
+    removed = sum(
+        1 for line in lines
+        if line.startswith('-') and not line.startswith('---')
+    )
 
-url_base = "https://api.github.com"
-user = "teodord25"
-repo_names = []
+    lines_changed = added + removed
 
-page = 1
-while True:
-    url = f"{url_base}/user/repos?type=all&per_page=100&page={page}"
-    response = requests.get(url, headers=HEADERS).json()
-    if not response:  # check if the page is empty
-        break
-    for repo in response:
-        repo_names.append(repo["name"])
-    page += 1
+    if language not in summary:
+        summary[language] = {
+            "lines_changed": lines_changed,
+        }
+    else:
+        summary[language]["lines_changed"] += lines_changed
 
-for repo_name in repo_names:
-    url = f"{url_base}/repos/{user}/{repo_name}/commits?since={date_seven_days_ago}"
-    response = requests.get(url, headers=HEADERS).json()
 
-    if not response or response.status_code != 200:
-        print(f"Skipping {repo_name} {response.status_code}")
-        continue
+def parse_file(file) -> List[str]:
+    filename = file["filename"]
 
-    for commit in response:
-        sha = commit["sha"]
-        url = f"{url_base}/repos/{user}/{repo_name}/commits/{sha}"
-        response = requests.get(url, headers=HEADERS, allow_redirects=True).json()
-        files = response["files"]
+    file_ext = os.path.splitext(filename)[1]
 
-        for file in files:
-            filename = file["filename"]
+    if file_ext not in LANGUAGES or file_ext == ".md":  # ignore markdown files
+        return []
 
-            file_ext = os.path.splitext(filename)[1]
+    return file["patch"].split('\n')
 
-            if file_ext not in LANGUAGES or file_ext == ".md":  # ignore markdown files
+
+SEVEN_DAYS_AGO = (datetime.now() - timedelta(days=7)
+                  ).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+URL_BASE = "https://api.github.com"
+USER = "teodord25"
+
+
+def main():
+    summary = {}
+    repo_names = []
+
+    page = 1
+    while True:
+        url = f"{URL_BASE}/user/repos?type=all&per_page=100&page={page}"
+        response = requests.get(url, headers=HEADERS).json()
+        if not response:  # check if the page is empty
+            break
+        for repo in response:
+            repo_names.append(repo["name"])
+        page += 1
+
+    for repo_name in repo_names:
+        if repo_name == ".github-private" or repo_name == ".github":
+            continue
+
+        url = f"{URL_BASE}/repos/{USER}/{repo_name}/commits?since={SEVEN_DAYS_AGO}"
+        response = requests.get(url, headers=HEADERS).json()
+
+        if isinstance(response, dict) and response.get("message") == "Not Found":
+            print(f"Skipping {repo_name}")
+            continue
+
+        for commit in response:
+            if commit is None or isinstance(commit, str):
                 continue
 
-            language = LANGUAGES[file_ext]
+            sha = commit["sha"]
+            url = f"{URL_BASE}/repos/{USER}/{repo_name}/commits/{sha}"
+            response = requests.get(url, headers=HEADERS,
+                                    allow_redirects=True).json()
+            files = response["files"]
+            for file in files:
+                lines = parse_file(file)
+                if not lines:
+                    continue
 
-            lines = file["patch"].split('\n')
+                language = LANGUAGES.get(os.path.splitext(file["filename"])[1])
 
-            added = sum(
-                1 for line in lines
-                if line.startswith('+') and not line.startswith('+++')
-            )
-            removed = sum(
-                1 for line in lines
-                if line.startswith('-') and not line.startswith('---')
-            )
+                compute_summary(summary, language, lines)
 
-            lines_changed = added + removed
+    print(summary)
 
-            if language not in summary:
-                summary[language] = {
-                    "lines_changed": lines_changed,
-                }
-            else:
-                summary[language]["lines_changed"] += lines_changed
 
-print(summary)
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(e)
