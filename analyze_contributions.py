@@ -17,8 +17,21 @@ while True:
     if not response:  # check if the page is empty
         break
     for repo in response:
-        print(repo["name"])
         repo_names.append(repo["name"])
     page += 1
 
-print(f"Repo names: {repo_names}")
+name = "teodord25"
+print(f"Repo: {name}")
+url = f"{url_base}/repos/{user}/{name}/commits"
+response = requests.get(url, headers=HEADERS).json()
+# if status not 200 skip
+for commit in response:
+    sha = commit["sha"]
+    url = f"{url_base}/repos/{user}/{name}/commits/{sha}"
+    response = requests.get(url, headers=HEADERS, allow_redirects=True).json()
+    files = response["files"]
+    for file in files:
+        print("File: " + file["filename"])
+        print("Diff: \n" + file["patch"])
+
+    print("\n")
