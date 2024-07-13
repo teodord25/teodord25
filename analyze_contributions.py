@@ -13,6 +13,8 @@ LANGUAGES = {
     '.html': 'HTML',
     '.css': 'CSS',
     '.py': 'Python',
+    '.yml': 'YAML',
+    '.yaml': 'YAML',
     '.kts': 'Kotlin',
     '.kt': 'Kotlin',
     '.cpp': 'C++',
