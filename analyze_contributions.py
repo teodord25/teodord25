@@ -67,7 +67,7 @@ EMAIL = "djuric.teodor25@gmail.com"
 
 def main():
     summary = {}
-    repo_names = []
+    repos = []
 
     page = 1
     while True:
@@ -76,18 +76,19 @@ def main():
         if not response:  # check if the page is empty
             break
         for repo in response:
-            repo_names.append(repo["name"])
+            owner = repo["owner"]["login"]
+            name = repo["name"]
+            repos.append((owner, name))
         page += 1
 
-    for repo_name in repo_names:
-        if repo_name == ".github-private" or repo_name == ".github":
+    for owner, name in repos:
+        if name == ".github-private" or name == ".github":
             continue
 
-        url = f"{URL_BASE}/repos/{USER}/{repo_name}/commits?since={SEVEN_DAYS_AGO}"
+        url = f"{URL_BASE}/repos/{owner}/{name}/commits?since={SEVEN_DAYS_AGO}"
         response = requests.get(url, headers=HEADERS).json()
 
         if isinstance(response, dict) and response.get("message") == "Not Found":
-            print(f"Skipping {repo_name}")
             continue
 
         for commit in response:
@@ -99,7 +100,7 @@ def main():
                 continue
 
             sha = commit["sha"]
-            url = f"{URL_BASE}/repos/{USER}/{repo_name}/commits/{sha}"
+            url = f"{URL_BASE}/repos/{owner}/{name}/commits/{sha}"
             response = requests.get(url, headers=HEADERS,
                                     allow_redirects=True).json()
             files = response["files"]
