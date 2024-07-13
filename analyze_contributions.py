@@ -62,6 +62,7 @@ SEVEN_DAYS_AGO = (datetime.now() - timedelta(days=7)
 
 URL_BASE = "https://api.github.com"
 USER = "teodord25"
+EMAIL = "djuric.teodor25@gmail.com"
 
 
 def main():
@@ -90,7 +91,11 @@ def main():
             continue
 
         for commit in response:
-            if commit is None or isinstance(commit, str):
+            if (
+                commit is None or
+                isinstance(commit, str) or
+                commit["commit"]["author"]["email"] != EMAIL
+            ):
                 continue
 
             sha = commit["sha"]
