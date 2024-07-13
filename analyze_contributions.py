@@ -26,6 +26,8 @@ LANGUAGES = {
 summary = {
 }
 
+date_seven_days_ago = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ')
+
 url_base = "https://api.github.com"
 user = "teodord25"
 repo_names = []
@@ -41,7 +43,7 @@ while True:
     page += 1
 
 for repo_name in repo_names:
-    url = f"{url_base}/repos/{user}/{repo_name}/commits"
+    url = f"{url_base}/repos/{user}/{repo_name}/commits?since={date_seven_days_ago}"
     response = requests.get(url, headers=HEADERS).json()
 
     if not response or response.status_code != 200:
