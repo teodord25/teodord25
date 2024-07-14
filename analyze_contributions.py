@@ -1,3 +1,5 @@
+# NOTE: this is pretty scuffed so don't expect it to be 100% accurate
+
 from datetime import datetime, timedelta
 from typing import List
 import requests
