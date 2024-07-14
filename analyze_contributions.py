@@ -22,6 +22,7 @@ LANGUAGES = {
     '.kt': 'Kotlin',
     '.cpp': 'C++',
     '.c': 'C',
+    '.cs': 'C#',
     '.js': 'JavaScript',
     '.java': 'Java',
 }
