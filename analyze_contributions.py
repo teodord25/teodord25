@@ -143,6 +143,12 @@ def main():
     repos = get_repos()
     summary = compute_summary(repos)
 
+    data = load_data()
+    data.pop(0)
+    data.append(summary)
+
+    save_data(data)
+
     return summary
 
 
