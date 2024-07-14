@@ -55,6 +55,9 @@ def parse_file(file) -> List[str]:
     if file_ext not in LANGUAGES or file_ext == ".md":  # ignore markdown files
         return []
 
+    if 'patch' not in file:
+        return []
+
     return file["patch"].split('\n')
 
 
