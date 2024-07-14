@@ -27,6 +27,12 @@ LANGUAGES = {
     '.cs': 'C#',
     '.js': 'JavaScript',
     '.java': 'Java',
+    '.tsx': 'TypeScript',
+    '.ts': 'TypeScript',
+    '.php': 'PHP',
+    '.sh': 'Shell',
+    '.lua': 'Lua',
+    '.h': 'C/C++ Header',
 }
 
 
