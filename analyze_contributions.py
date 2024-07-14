@@ -120,6 +120,25 @@ def compute_summary(repos):
     return summary
 
 
+def load_data():
+    try:
+        with open('weekly_data.json', 'r') as file:
+            data = json.load(file)
+            if len(data) != 52:
+                raise Exception("Invalid data")
+            return data
+    except FileNotFoundError:
+        return []
+
+
+def save_data(data):
+    # keep the latest 52 weeks
+    if len(data) > 52:
+        data = data[-52:]
+    with open('weekly_data.json', 'w') as file:
+        json.dump(data, file, indent=4)
+
+
 def main():
     repos = get_repos()
     summary = compute_summary(repos)
