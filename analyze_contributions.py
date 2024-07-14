@@ -36,7 +36,12 @@ LANGUAGES = {
 }
 
 
-def compute_commit(summary, language, lines):
+URL_BASE = "https://api.github.com"
+USER = "teodord25"
+EMAIL = "djuric.teodor25@gmail.com"
+
+
+def compute_lines(lines):
     added = sum(
         1 for line in lines
         if line.startswith('+') and not line.startswith('+++')
@@ -48,12 +53,7 @@ def compute_commit(summary, language, lines):
 
     lines_changed = added + removed
 
-    if language not in summary:
-        summary[language] = {
-            "lines_changed": lines_changed,
-        }
-    else:
-        summary[language]["lines_changed"] += lines_changed
+    return lines_changed
 
 
 def parse_file(file) -> List[str]:
@@ -68,11 +68,6 @@ def parse_file(file) -> List[str]:
         return []
 
     return file["patch"].split('\n')
-
-
-URL_BASE = "https://api.github.com"
-USER = "teodord25"
-EMAIL = "djuric.teodor25@gmail.com"
 
 
 def get_repos():
@@ -124,7 +119,25 @@ def compute_summary_for_week(repos, start_date):
 
                 language = LANGUAGES.get(os.path.splitext(file["filename"])[1])
 
-                compute_commit(summary, language, lines)
+                lines_changed = compute_lines(lines)
+
+                week = start_date.strftime('%Y-%m-%d')
+
+                if week not in summary:
+                    summary[week] = [
+                        {
+                            "language": language,
+                            "lines_changed": lines_changed
+                        }
+                    ]
+
+                else:
+                    summary[week].append(
+                        {
+                            "language": language,
+                            "lines_changed": lines_changed
+                        }
+                    )
 
     return summary
 
