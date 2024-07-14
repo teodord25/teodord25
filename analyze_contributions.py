@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from typing import List
 import requests
 import os
+import json
 
 HEADERS = {
     'Authorization': f'token {os.getenv("GITHUB_TOKEN")}',
@@ -26,7 +27,7 @@ LANGUAGES = {
 }
 
 
-def compute_summary(summary, language, lines):
+def compute_commit(summary, language, lines):
     added = sum(
         1 for line in lines
         if line.startswith('+') and not line.startswith('+++')
@@ -57,18 +58,17 @@ def parse_file(file) -> List[str]:
     return file["patch"].split('\n')
 
 
-SEVEN_DAYS_AGO = (datetime.now() - timedelta(days=7)
-                  ).strftime('%Y-%m-%dT%H:%M:%SZ')
+SEVEN_DAYS_AGO = (
+    datetime.now() - timedelta(days=7)
+).strftime('%Y-%m-%dT%H:%M:%SZ')
 
 URL_BASE = "https://api.github.com"
 USER = "teodord25"
 EMAIL = "djuric.teodor25@gmail.com"
 
 
-def main():
-    summary = {}
+def get_repos():
     repos = []
-
     page = 1
     while True:
         url = f"{URL_BASE}/user/repos?type=all&per_page=100&page={page}"
@@ -80,7 +80,11 @@ def main():
             name = repo["name"]
             repos.append((owner, name))
         page += 1
+    return repos
 
+
+def compute_summary(repos):
+    summary = {}
     for owner, name in repos:
         if name == ".github-private" or name == ".github":
             continue
@@ -111,9 +115,16 @@ def main():
 
                 language = LANGUAGES.get(os.path.splitext(file["filename"])[1])
 
-                compute_summary(summary, language, lines)
+                compute_commit(summary, language, lines)
 
-    print(summary)
+    return summary
+
+
+def main():
+    repos = get_repos()
+    summary = compute_summary(repos)
+
+    return summary
 
 
 if __name__ == "__main__":
