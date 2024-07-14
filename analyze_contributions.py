@@ -58,10 +58,6 @@ def parse_file(file) -> List[str]:
     return file["patch"].split('\n')
 
 
-SEVEN_DAYS_AGO = (
-    datetime.now() - timedelta(days=7)
-).strftime('%Y-%m-%dT%H:%M:%SZ')
-
 URL_BASE = "https://api.github.com"
 USER = "teodord25"
 EMAIL = "djuric.teodor25@gmail.com"
@@ -83,13 +79,14 @@ def get_repos():
     return repos
 
 
-def compute_summary(repos):
+def compute_summary_for_week(repos, start_date):
     summary = {}
+    formatted_date = start_date.strftime('%Y-%m-%dT%H:%M:%SZ')
     for owner, name in repos:
         if name == ".github-private" or name == ".github":
             continue
 
-        url = f"{URL_BASE}/repos/{owner}/{name}/commits?since={SEVEN_DAYS_AGO}"
+        url = f"{URL_BASE}/repos/{owner}/{name}/commits?since={formatted_date}&until={start_date + timedelta(days=7)}"
         response = requests.get(url, headers=HEADERS).json()
 
         if isinstance(response, dict) and response.get("message") == "Not Found":
@@ -141,9 +138,10 @@ def save_data(data):
 
 def main():
     repos = get_repos()
-    summary = compute_summary(repos)
-
     data = load_data()
+    today = datetime.now()
+    summary = compute_summary_for_week(repos, today - timedelta(days=7))
+
     data.pop(0)
     data.append(summary)
 
