@@ -239,14 +239,20 @@ def plot_stacked_bar_chart(data, y_limit=4000):
     plt.savefig('weekly_lines_changed.png')
 
 
-def main():
-    data = load_data()
+def update_data(data):
     summary = compute_summary_for_week(get_repos(), datetime.today() - timedelta(days=7))
 
     data.append(summary)  # add new week
     data.pop(0)  # remove oldest week
 
     save_data(data)
+
+
+def main():
+    data = load_data()
+
+    update_data(data)
+
     plot_stacked_bar_chart(data)
 
 
