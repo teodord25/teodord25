@@ -241,6 +241,12 @@ def plot_stacked_bar_chart(data, y_limit=4000):
 
 def main():
     data = load_data()
+    summary = compute_summary_for_week(get_repos(), datetime.today() - timedelta(days=7))
+
+    data.append(summary)  # add new week
+    data.pop(0)  # remove oldest week
+
+    save_data(data)
     plot_stacked_bar_chart(data)
 
 
