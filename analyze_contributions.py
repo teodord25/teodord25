@@ -131,13 +131,24 @@ def compute_summary_for_week(repos, start_date):
                         }
                     ]
 
-                else:
+                elif len(summary[week]) == 0:
                     summary[week].append(
                         {
                             "language": language,
                             "lines_changed": lines_changed
                         }
                     )
+                elif language not in [commit["language"] for commit in summary[week]]:
+                    summary[week].append(
+                        {
+                            "language": language,
+                            "lines_changed": lines_changed
+                        }
+                    )
+                else:
+                    for commit in summary[week]:
+                        if commit["language"] == language:
+                            commit["lines_changed"] += lines_changed
 
     return summary
 
