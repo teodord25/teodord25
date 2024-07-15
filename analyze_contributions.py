@@ -5,6 +5,10 @@ from typing import List
 import requests
 import os
 import json
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator  # Added to handle y-axis ticks
+import numpy as np
+import pprint
 
 HEADERS = {
     'Authorization': f'token {os.getenv("GITHUB_TOKEN")}',
@@ -172,18 +176,62 @@ def save_data(data):
         json.dump(data, file, indent=4)
 
 
+def plot_stacked_bar_chart(data):
+    all_languages = set()
+    for week in data:
+        for date, entries in week.items():
+            for entry in entries:
+                all_languages.add(entry['language'])
+
+    # Extracting unique weeks and sorting them
+    dates = []
+    curr_date = ""
+    for week in data:
+        if week == {}:
+            dates.append((datetime.strptime(curr_date, '%Y-%m-%d') + timedelta(days=7)).strftime('%Y-%m-%d'))
+
+        for date, entries in week.items():
+            dates.append(date)
+            curr_date = date
+
+    # Initialize weekly data summaries for each language
+    weekly_summaries = {lang: [0] * len(dates) for lang in all_languages}
+
+    # Fill weekly_summaries with actual data
+    for i, week in enumerate(data):
+        for date, entries in week.items():
+            if date not in dates:
+                continue
+            index = dates.index(date)
+            for entry in entries:
+                weekly_summaries[entry['language']][index] += entry['lines_changed']
+
+    # Plotting
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bottom = np.zeros(len(dates))
+
+    for lang in all_languages:
+        values = weekly_summaries[lang]
+        ax.bar(dates, values, bottom=bottom, label=lang)
+        bottom += np.array(values)
+
+    ax.set_xlabel('Weeks')
+    ax.set_ylabel('Lines Changed')
+    ax.set_title('Weekly Lines Changed by Language')
+    ax.legend(title='Languages', bbox_to_anchor=(1.05, 1), loc='upper left')
+
+    plt.xticks(rotation=90)
+
+    ax.yaxis.set_major_locator(MaxNLocator(integer=True))  # Adjust number of ticks on y-axis
+
+    plt.tight_layout()
+    plt.show()
+    plt.savefig('weekly_lines_changed.png')
+
+
 def main():
-    repos = get_repos()
     data = load_data()
-    today = datetime.now()
-    summary = compute_summary_for_week(repos, today - timedelta(days=7))
-
-    data.pop(0)
-    data.append(summary)
-
-    save_data(data)
-
-    return summary
+    plot_stacked_bar_chart(data)
 
 
 if __name__ == "__main__":
