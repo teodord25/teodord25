@@ -76,17 +76,24 @@ def get_repos():
 
 
 def plot_pie_chart(data):
-    labels = data.keys()
-    sizes = data.values()
-    colors = plt.get_cmap('tab20')(range(len(data)))
+    labels = list(data.keys())
+    sizes = list(data.values())
+    colors = [COLORS[lang] for lang in labels]
+
+    explode = (0.1,) * len(data)
 
     fig, ax = plt.subplots()
-    ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+    pie_wedges = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors, explode=explode, shadow=True)
+
+    for text in pie_wedges[1]:
+        text.set_color('white')
+        text.set_fontsize('12')
+        text.set_fontweight('bold')
+
     ax.axis('equal')
 
-    plt.title('Commit Distribution by Programming Language')
-    plt.show()
-    plt.savefig('commit_distribution.png')
+    plt.title('This week i used (commit distribution):', fontsize=14, fontweight='bold', color='white')
+    plt.savefig('commit_distribution.png', bbox_inches='tight', transparent=True)
 
 
 def compute_summary(repos):
