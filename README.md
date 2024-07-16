@@ -1,1 +1,1 @@
-![Weekly Lines Changed](./weekly_lines_changed.png)
+<!--![Weekly Lines Changed](./weekly_lines_changed.png)
