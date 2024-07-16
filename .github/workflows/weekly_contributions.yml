@@ -17,5 +17,13 @@ jobs:
           docker-compose build
           docker-compose up -d
 
+      - name: Commit and Push Updated Data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add weekly_lines_changed.png weekly_data.json
+          git commit -m "Update weekly lines changed data"
+          git push
+
       - name: Clean up
         run: docker-compose down
