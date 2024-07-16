@@ -33,6 +33,26 @@ LANGUAGES = {
     '.lua': 'Lua',
 }
 
+COLORS = {
+    'Rust': '#dea584',
+    'Go': '#00ADD8',
+    'Gleam': '#ffaff3',
+    'HTML': '#e34c26',
+    'CSS': '#563d7c',
+    'Python': '#3572A5',
+    'YAML': '#cb171e',
+    'Kotlin': '#F88A02',
+    'C++': '#00599C',
+    'C': '#555555',
+    'C#': '#178600',
+    'JavaScript': '#f1e05a',
+    'Java': '#b07219',
+    'TypeScript': '#3178c6',
+    'PHP': '#4F5D95',
+    'Shell': '#89e051',
+    'Lua': '#000080'
+}
+
 
 URL_BASE = "https://api.github.com"
 USER = "teodord25"
