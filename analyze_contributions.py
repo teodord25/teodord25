@@ -229,7 +229,7 @@ def plot_stacked_bar_chart(data, y_limit=4000):
     ax.set_ylabel('Lines Changed')
 
     fig.suptitle('Weekly Lines Changed by Language', fontsize=16)
-    plt.title('Overflowing lines are from uploading existing projects (legacy codebase)', fontsize=10, pad=10)
+    plt.title('Overflowing bars represent integrating and updating legacy code', fontsize=10, pad=10)
 
     ax.legend(title='Languages', bbox_to_anchor=(1.05, 1), loc='upper left')
 
