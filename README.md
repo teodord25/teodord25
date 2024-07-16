@@ -1,1 +1,1 @@
-![Weekly Lines Changed](./weekly_lines_changed.png)
+![Weekly Commit Distribution Per Language](./commit_distribution.png)
