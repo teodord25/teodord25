@@ -83,12 +83,17 @@ def plot_pie_chart(data):
     explode = (0.1,) * len(data)
 
     fig, ax = plt.subplots()
-    pie_wedges = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors, explode=explode, shadow=True)
+    patches, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors, explode=explode, shadow=True)
 
-    for text in pie_wedges[1]:
+    for text in texts:
         text.set_color('white')
         text.set_fontsize('12')
         text.set_fontweight('bold')
+
+    for autotext in autotexts:
+        autotext.set_color('white')
+        autotext.set_fontsize('10')
+        autotext.set_fontweight('bold')
 
     ax.axis('equal')
 
