@@ -36,7 +36,6 @@ LANGUAGES = {
     '.php': 'PHP',
     '.sh': 'Shell',
     '.lua': 'Lua',
-    '.h': 'C/C++ Header',
 }
 
 

@@ -53,10 +53,6 @@
             {
                 "language": "HTML",
                 "lines_changed": 236
-            },
-            {
-                "language": "C/C++ Header",
-                "lines_changed": 479
             }
         ]
     },
@@ -65,10 +61,6 @@
             {
                 "language": "C++",
                 "lines_changed": 1254
-            },
-            {
-                "language": "C/C++ Header",
-                "lines_changed": 231
             },
             {
                 "language": "HTML",
