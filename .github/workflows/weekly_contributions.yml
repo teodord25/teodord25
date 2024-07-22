@@ -21,7 +21,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add weekly_lines_changed.png weekly_data.json
+          git add commit_distribution.png
           git commit -m "Update weekly lines changed data"
           git push
 
