@@ -167,8 +167,12 @@ def compute_summary(repos):
 
 
 def main():
-    summary = compute_summary(get_repos())
-    plot_pie_chart(summary)
+    try:
+        summary = compute_summary(get_repos())
+        plot_pie_chart(summary)
+    except Exception as e:
+        print(f"Error: {e}")
+        exit(1)
 
 
 if __name__ == "__main__":
