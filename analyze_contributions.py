@@ -113,6 +113,7 @@ def compute_summary(repos):
     summary = {}
     seven_days_ago = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ')
     print(f"Computing summary for commits since {seven_days_ago}...", flush=True)
+    print(f"{len(repos)} repos to process: {repos[:5]}", flush=True)
 
     for owner, name in repos:
         if name == ".github-private" or name == ".github":
