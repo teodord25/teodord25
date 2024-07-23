@@ -23,6 +23,11 @@ jobs:
         run: |
           sudo chown -R $(whoami) commit_distribution.png
 
+      - name: Check token scopes
+        run: |
+          curl -H "Authorization: token ${{ secrets.TOKEN }}" https://api.github.com/rate_limit
+
+
       - name: Commit and Push Updated Data
         run: |
           git config --local user.email "action@github.com"
