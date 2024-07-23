@@ -19,7 +19,7 @@ jobs:
           docker-compose build
           docker-compose up -d
           sleep 10
-          docker-compose logs
+          docker-compose logs --follow &
 
       - name: Correct File Ownership
         run: |
