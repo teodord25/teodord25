@@ -60,17 +60,20 @@ EMAIL = "djuric.teodor25@gmail.com"
 
 
 def get_repos():
+    print("Starting to fetch repositories...", flush=True)
     repos = []
     page = 1
     while True:
         url = f"{URL_BASE}/user/repos?type=all&per_page=100&page={page}"
         response = requests.get(url, headers=HEADERS).json()
         if not response:  # check if the page is empty
+            print(f"No more repos found at page {page}. Exiting...", flush=True)
             break
         for repo in response:
             owner = repo["owner"]["login"]
             name = repo["name"]
             repos.append((owner, name))
+        print(f"Page {page}: {len(response)} repos found.", flush=True)
         page += 1
     return repos
 
@@ -104,6 +107,7 @@ def plot_pie_chart(data):
 def compute_summary(repos):
     summary = {}
     seven_days_ago = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ')
+    print(f"Computing summary for commits since {seven_days_ago}...", flush=True)
 
     for owner, name in repos:
         if name == ".github-private" or name == ".github":
@@ -127,6 +131,7 @@ def compute_summary(repos):
                 continue
 
             sha = commit["sha"]
+            print(f"Processing commit {sha} in repo {name}.", flush=True)
             url = f"{URL_BASE}/repos/{owner}/{name}/commits/{sha}"
             response = requests.get(
                 url, headers=HEADERS, allow_redirects=True
@@ -148,6 +153,7 @@ def compute_summary(repos):
                 else:
                     summary[language] = 1
 
+    print("Summary of languages used:", summary, flush=True)
     return summary
 
 
