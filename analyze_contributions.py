@@ -113,7 +113,6 @@ def compute_summary(repos):
     summary = {}
     seven_days_ago = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ')
     print(f"Computing summary for commits since {seven_days_ago}...", flush=True)
-    print(f"{len(repos)} repos to process: {repos[:5]}", flush=True)
 
     for owner, name in repos:
         if name == ".github-private" or name == ".github":
@@ -121,11 +120,14 @@ def compute_summary(repos):
 
         url = f"{URL_BASE}/repos/{owner}/{name}/commits?since={seven_days_ago}"
         response = requests.get(url, headers=HEADERS).json()
+        print(url, flush=True)
 
         if response == []:
+            print(f"No commits found in repo {name}.", flush=True)
             continue
 
         if isinstance(response, dict):
+            print(f"Error: {response['message']}", flush=True)
             continue
 
         for commit in response:
@@ -134,6 +136,7 @@ def compute_summary(repos):
                 isinstance(commit, str) or
                 commit["commit"]["author"]["email"] != EMAIL
             ):
+                print(f"Skipping commit {commit} in repo {name}.", flush=True)
                 continue
 
             sha = commit["sha"]
