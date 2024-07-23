@@ -1,1 +1,1 @@
-![Weekly Commit Distribution Per Language](./commit_distribution.png)
+![Weekly Commit Distribution Per Language](./commit_distribution.png?v=28)
