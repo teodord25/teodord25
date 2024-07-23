@@ -19,14 +19,6 @@ jobs:
           docker-compose build
           docker-compose up
 
-      - name: Correct File Ownership
-        run: |
-          sudo chown -R $(whoami) commit_distribution.png
-
-      - name: Check token scopes
-        run: |
-          curl -H "Authorization: token ${{ secrets.TOKEN }}" https://api.github.com/rate_limit
-
       - name: Configure Git
         run: |
           git config http.sslVerify false
