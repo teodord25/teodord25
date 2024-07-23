@@ -120,14 +120,13 @@ def compute_summary(repos):
 
         url = f"{URL_BASE}/repos/{owner}/{name}/commits?since={seven_days_ago}"
         response = requests.get(url, headers=HEADERS).json()
-        print(url, flush=True)
+
+        print(f"Processing repo {name}...", flush=True)
 
         if response == []:
-            print(f"No commits found in repo {name}.", flush=True)
             continue
 
         if isinstance(response, dict):
-            print(f"Error: {response['message']}", flush=True)
             continue
 
         for commit in response:
@@ -136,11 +135,9 @@ def compute_summary(repos):
                 isinstance(commit, str) or
                 commit["commit"]["author"]["email"] != EMAIL
             ):
-                print(f"Skipping commit {commit} in repo {name}.", flush=True)
                 continue
 
             sha = commit["sha"]
-            print(f"Processing commit {sha} in repo {name}.", flush=True)
             url = f"{URL_BASE}/repos/{owner}/{name}/commits/{sha}"
             response = requests.get(
                 url, headers=HEADERS, allow_redirects=True
@@ -161,6 +158,8 @@ def compute_summary(repos):
                     summary[language] += 1
                 else:
                     summary[language] = 1
+
+        print(f"Current summary after repo {name}: ", summary, flush=True)
 
     print("Summary of languages used:", summary, flush=True)
     return summary
