@@ -22,6 +22,11 @@ jobs:
           docker-compose build
           docker-compose up
 
+      - name: Update README.md with new image version to force refresh
+        run: |
+          week_number=$(date +%U)
+          sed -i "s|\(commit_distribution.png?v=\)[0-9]*|\1${week_number}|" README.md
+
       - name: Configure Git
         run: |
           git config http.sslVerify false
