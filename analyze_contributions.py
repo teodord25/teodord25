@@ -6,7 +6,7 @@ import os
 import matplotlib.pyplot as plt
 import logging
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 HEADERS = {
@@ -110,10 +110,7 @@ def plot_pie_chart(data):
     ax.axis('equal')
 
     plt.title('This week i used (commit distribution):', fontsize=14, fontweight='bold', color='white')
-    os.system('pwd')
-    os.system('ls -l')
     plt.savefig('commit_distribution.png', bbox_inches='tight', transparent=True)
-    os.system('ls -l')
 
 
 def compute_summary(repos):
