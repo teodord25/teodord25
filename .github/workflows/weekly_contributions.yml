@@ -2,7 +2,7 @@ name: Weekly Contributions
 
 on:
   schedule:
-    - cron: '0 20 * * 0'  # runs at 20:00 every sunday
+    - cron: '0 20 * * 0'  # runs at 20:00 every Sunday
   workflow_dispatch: # allows manual triggering
 
 jobs:
@@ -27,11 +27,14 @@ jobs:
         run: |
           curl -H "Authorization: token ${{ secrets.TOKEN }}" https://api.github.com/rate_limit
 
-
-      - name: Commit and Push Updated Data
+      - name: Configure Git
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git remote set-url origin https://${{ secrets.TOKEN }}@github.com/teodord25/teodord25.git
+
+      - name: Commit and Push Updated Data
+        run: |
           echo "--------------------"
           git status
           echo "--------------------"
@@ -40,7 +43,7 @@ jobs:
           git status
           echo "--------------------"
           git commit -m "Update commit distribution piechart"
-          git push https://${{ secrets.TOKEN }}@github.com/teodord25/teodord25.git
+          git push origin master
           echo "--------------------"
           git log -1
 
