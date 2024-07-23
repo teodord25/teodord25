@@ -121,8 +121,6 @@ def compute_summary(repos):
         url = f"{URL_BASE}/repos/{owner}/{name}/commits?since={seven_days_ago}"
         response = requests.get(url, headers=HEADERS).json()
 
-        print(f"Processing repo {name}...", flush=True)
-
         if response == []:
             continue
 
