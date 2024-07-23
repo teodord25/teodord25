@@ -161,7 +161,7 @@ def compute_summary(repos):
                 else:
                     summary[language] = 1
 
-        logging.info(f"Current summary after repo {name}: {summary}")
+        logging.info(f"Current summary: {summary}")
 
     logging.info("Summary of languages used: {summary}")
     return summary
