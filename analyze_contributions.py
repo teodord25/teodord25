@@ -109,7 +109,7 @@ def plot_pie_chart(data):
 
     ax.axis('equal')
 
-    plt.title('This week i used (commit distribution):', fontsize=14, fontweight='bold', color='white')
+    plt.title('Last week i used (commit distribution):', fontsize=14, fontweight='bold', color='white')
     plt.savefig('commit_distribution.png', bbox_inches='tight', transparent=True)
 
 
