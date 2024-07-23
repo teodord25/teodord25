@@ -74,9 +74,8 @@ def get_repos():
                 owner = repo["owner"]["login"]
             except Exception as e:
                 print(f"Error: {e}")
-                print(f"Response: {page}")
-                print(f"Repo: {repo}")
-                continue
+                print(f"Response: {response}")
+                exit(1)
             name = repo["name"]
             repos.append((owner, name))
         print(f"Page {page}: {len(response)} repos found.", flush=True)
