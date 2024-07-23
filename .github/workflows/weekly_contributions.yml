@@ -29,23 +29,17 @@ jobs:
 
       - name: Configure Git
         run: |
+          git config http.sslVerify false
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git remote set-url origin https://${{ secrets.TOKEN }}@github.com/teodord25/teodord25.git
+          git remote add publisher "https://${{ github.actor }}:${{ secrets.TOKEN }}@github.com/${{ github.repository }}.git"
+          git show-ref
 
       - name: Commit and Push Updated Data
         run: |
-          echo "--------------------"
-          git status
-          echo "--------------------"
           git add commit_distribution.png
-          echo "--------------------"
-          git status
-          echo "--------------------"
-          git commit -m "Update commit distribution piechart"
-          git push origin master
-          echo "--------------------"
-          git log -1
+          git commit -m "Update commit distribution piechart " $(date -u) || exit 0
+          git push publisher master
 
       - name: Clean up
         run: docker-compose down
