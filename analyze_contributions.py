@@ -173,6 +173,7 @@ def compute_summary(repos):
 def main():
     try:
         summary = compute_summary(get_repos())
+        logging.info(f"Summary: {summary}")
         plot_pie_chart(summary)
     except Exception as e:
         logging.info(f"Error: {e}")
