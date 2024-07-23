@@ -25,7 +25,7 @@ jobs:
       - name: Update README.md with new image version to force refresh
         run: |
           week_number=$(date +%U)
-          sed -i "s|\(commit_distribution.png?v=\)[0-9]*|\1${week_number}|" README.md
+          sed -i "s|\(commit_distribution_week_\)[0-9]*.png|\1${week_number}.png|" README.md
 
       - name: Configure Git
         run: |
@@ -37,7 +37,7 @@ jobs:
 
       - name: Commit and Push Updated Data
         run: |
-          git add commit_distribution.png README.md
+          git add *.png README.md
           git commit -m "Update commit distribution piechart $(date -u)" || exit 0
           git push publisher master
           echo "success"
