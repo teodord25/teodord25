@@ -38,7 +38,7 @@ jobs:
       - name: Commit and Push Updated Data
         run: |
           git add commit_distribution.png
-          git commit -m "Update commit distribution piechart " $(date -u) || exit 0
+          git commit -m "Update commit distribution piechart ${$(date -u)}" || exit 0
           git push publisher master
 
       - name: Clean up
