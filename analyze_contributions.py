@@ -4,6 +4,10 @@ from datetime import datetime, timedelta
 import requests
 import os
 import matplotlib.pyplot as plt
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 HEADERS = {
     'Authorization': f'token {os.getenv("GITHUB_TOKEN")}',
@@ -60,25 +64,25 @@ EMAIL = "djuric.teodor25@gmail.com"
 
 
 def get_repos():
-    print("Starting to fetch repositories...", flush=True)
+    logging.info("Starting to fetch repositories...")
     repos = []
     page = 1
     while True:
         url = f"{URL_BASE}/user/repos?type=all&per_page=100&page={page}"
         response = requests.get(url, headers=HEADERS).json()
         if not response:  # check if the page is empty
-            print(f"No more repos found at page {page}. Exiting...", flush=True)
+            logging.info(f"No more repos found at page {page}. Exiting...")
             break
         for repo in response:
             try:
                 owner = repo["owner"]["login"]
             except Exception as e:
-                print(f"Error: {e}")
-                print(f"Response: {response}")
+                logging.info(f"Error: {e}")
+                logging.info(f"Response: {response}")
                 exit(1)
             name = repo["name"]
             repos.append((owner, name))
-        print(f"Page {page}: {len(response)} repos found.", flush=True)
+        logging.info(f"Page {page}: {len(response)} repos found.")
         page += 1
     return repos
 
@@ -115,7 +119,7 @@ def plot_pie_chart(data):
 def compute_summary(repos):
     summary = {}
     seven_days_ago = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    print(f"Computing summary for commits since {seven_days_ago}...", flush=True)
+    logging.info(f"Computing summary for commits since {seven_days_ago}...")
 
     for owner, name in repos:
         if name == ".github-private" or name == ".github":
@@ -160,9 +164,9 @@ def compute_summary(repos):
                 else:
                     summary[language] = 1
 
-        print(f"Current summary after repo {name}: ", summary, flush=True)
+        logging.info(f"Current summary after repo {name}: ", summary)
 
-    print("Summary of languages used:", summary, flush=True)
+    logging.info("Summary of languages used:", summary)
     return summary
 
 
@@ -171,7 +175,7 @@ def main():
         summary = compute_summary(get_repos())
         plot_pie_chart(summary)
     except Exception as e:
-        print(f"Error: {e}")
+        logging.info(f"Error: {e}")
         exit(1)
 
 
