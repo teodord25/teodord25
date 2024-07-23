@@ -24,7 +24,7 @@ jobs:
 
       - name: Update README.md with new image version to force refresh
         run: |
-          week_number=$(date +%U)
+          week_number=$(date -d "last week" +%U)
           sed -i "s|\(commit_distribution_week_\)[0-9]*.png|\1${week_number}.png|" README.md
 
       - name: Configure Git

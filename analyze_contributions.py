@@ -109,12 +109,12 @@ def plot_pie_chart(data):
 
     ax.axis('equal')
 
-    week_num = int(datetime.today().strftime('%U'))
-    previous_week_num = week_num - 1
+    last_week_num = int(datetime.today().strftime('%U')) - 1
+    old_week_num = last_week_num - 1
 
     plt.title('Last week i used (commit distribution):', fontsize=14, fontweight='bold', color='white')
-    plt.savefig(f'commit_distribution_week_{week_num}.png', bbox_inches='tight', transparent=True)
-    os.remove(f'commit_distribution_week_{previous_week_num}.png')
+    plt.savefig(f'commit_distribution_week_{last_week_num}.png', bbox_inches='tight', transparent=True)
+    os.remove(f'commit_distribution_week_{old_week_num}.png')
 
 
 def compute_summary(repos):
