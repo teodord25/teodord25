@@ -30,7 +30,7 @@ jobs:
           git status
           git add commit_distribution.png
           git status
-          git diff --staged --exit-code || (git commit -m "Update commit distribution graph" && git push)
+          git diff --staged --exit-code || (git commit -m "Update commit distribution piechart" && git push https://${{ secrets.TOKEN }}@github.com/teodord25/teodord25.git master)
           git log -1
 
       - name: Clean up
