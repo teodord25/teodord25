@@ -17,9 +17,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           docker-compose build
-          docker-compose up -d
-          sleep 10
-          docker-compose logs --follow &
+          docker-compose up
 
       - name: Correct File Ownership
         run: |
