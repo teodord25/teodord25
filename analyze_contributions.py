@@ -70,7 +70,13 @@ def get_repos():
             print(f"No more repos found at page {page}. Exiting...", flush=True)
             break
         for repo in response:
-            owner = repo["owner"]["login"]
+            try:
+                owner = repo["owner"]["login"]
+            except Exception as e:
+                print(f"Error: {e}")
+                print(f"Response: {page}")
+                print(f"Repo: {repo}")
+                continue
             name = repo["name"]
             repos.append((owner, name))
         print(f"Page {page}: {len(response)} repos found.", flush=True)
