@@ -52,21 +52,15 @@ def get_repos():
 
 
 def plot_pie_chart(data):
+    data = {k: v for k, v in sorted(data.items(), key=lambda item: item[1], reverse=True)}
     labels = list(data.keys())
     sizes = list(data.values())
-    colors = []
-    for label in labels:
-        colors.append(COLORS.get(label, 'gray'))
+    colors = [COLORS.get(label, 'gray') for label in labels]
 
     explode = (0.1,) * len(data)
 
     fig, ax = plt.subplots()
-    patches, texts, autotexts = ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors, explode=explode, shadow=True)
-
-    for text in texts:
-        text.set_color('white')
-        text.set_fontsize('12')
-        text.set_fontweight('bold')
+    patches, texts, autotexts = ax.pie(sizes, autopct='%1.1f%%', colors=colors, explode=explode, shadow=True)
 
     for autotext in autotexts:
         autotext.set_color('white')
@@ -75,12 +69,19 @@ def plot_pie_chart(data):
 
     ax.axis('equal')
 
+    legend_labels = [f"{label} ({size})" for label, size in zip(labels, sizes)]
+
+    ax.legend(patches, legend_labels, title="Languages", loc="center left", bbox_to_anchor=(1, 0.5), fontsize='12')
     last_week_num = int(datetime.today().strftime('%U')) - 1
     old_week_num = last_week_num - 1
 
-    plt.title('Last week i used (commit distribution):', fontsize=14, fontweight='bold', color='white')
+    plt.title('Last week I used (commit distribution):', fontsize=14, fontweight='bold', color='white')
     plt.savefig(f'commit_distribution_week_{last_week_num}.png', bbox_inches='tight', transparent=True)
-    os.remove(f'commit_distribution_week_{old_week_num}.png')
+    plt.show()
+
+    old_file = f'commit_distribution_week_{old_week_num}.png'
+    if os.path.exists(old_file):
+        os.remove(old_file)
 
 
 def compute_summary(repos):
