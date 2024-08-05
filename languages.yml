@@ -227,19 +227,6 @@ Ada:
   tm_scope: source.ada
   ace_mode: ada
   language_id: 11
-Adblock Filter List:
-  type: data
-  color: "#800000"
-  ace_mode: text
-  extensions:
-  - ".txt"
-  aliases:
-  - ad block filters
-  - ad block
-  - adb
-  - adblock
-  tm_scope: text.adblock
-  language_id: 884614762
 Adobe Font Metrics:
   type: data
   color: "#fa0f00"
@@ -4747,52 +4734,6 @@ Nushell:
   codemirror_mode: shell
   codemirror_mime_type: text/x-sh
   language_id: 446573572
-OASv2-json:
-  type: data
-  color: "#85ea2d"
-  extensions:
-  - ".json"
-  group: OpenAPI Specification v2
-  tm_scope: source.json
-  ace_mode: json
-  codemirror_mode: javascript
-  codemirror_mime_type: application/json
-  language_id: 834374816
-OASv2-yaml:
-  type: data
-  color: "#85ea2d"
-  extensions:
-  - ".yaml"
-  - ".yml"
-  group: OpenAPI Specification v2
-  tm_scope: source.yaml
-  ace_mode: yaml
-  codemirror_mode: yaml
-  codemirror_mime_type: text/x-yaml
-  language_id: 105187618
-OASv3-json:
-  type: data
-  color: "#85ea2d"
-  extensions:
-  - ".json"
-  group: OpenAPI Specification v3
-  tm_scope: source.json
-  ace_mode: json
-  codemirror_mode: javascript
-  codemirror_mime_type: application/json
-  language_id: 980062566
-OASv3-yaml:
-  type: data
-  color: "#85ea2d"
-  extensions:
-  - ".yaml"
-  - ".yml"
-  group: OpenAPI Specification v3
-  tm_scope: source.yaml
-  ace_mode: yaml
-  codemirror_mode: yaml
-  codemirror_mime_type: text/x-yaml
-  language_id: 51239111
 OCaml:
   type: programming
   ace_mode: ocaml
@@ -7564,56 +7505,6 @@ Verilog:
   codemirror_mode: verilog
   codemirror_mime_type: text/x-verilog
   language_id: 387
-Vim Help File:
-  type: prose
-  color: "#199f4b"
-  aliases:
-  - help
-  - vimhelp
-  extensions:
-  - ".txt"
-  tm_scope: text.vim-help
-  ace_mode: text
-  language_id: 508563686
-Vim Script:
-  type: programming
-  color: "#199f4b"
-  tm_scope: source.viml
-  aliases:
-  - vim
-  - viml
-  - nvim
-  extensions:
-  - ".vim"
-  - ".vba"
-  - ".vimrc"
-  - ".vmb"
-  filenames:
-  - ".exrc"
-  - ".gvimrc"
-  - ".nvimrc"
-  - ".vimrc"
-  - _vimrc
-  - gvimrc
-  - nvimrc
-  - vimrc
-  ace_mode: text
-  language_id: 388
-Vim Snippet:
-  type: markup
-  color: "#199f4b"
-  aliases:
-  - SnipMate
-  - UltiSnip
-  - UltiSnips
-  - NeoSnippet
-  extensions:
-  - ".snip"
-  - ".snippet"
-  - ".snippets"
-  tm_scope: source.vim-snippet
-  ace_mode: text
-  language_id: 81265970
 Visual Basic .NET:
   type: programming
   color: "#945db7"
