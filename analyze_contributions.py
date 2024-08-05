@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 import requests
 import os
+import yaml
 import matplotlib.pyplot as plt
 import logging
 
@@ -15,46 +16,9 @@ HEADERS = {
 }
 
 LANGUAGES = {
-    '.rs': 'Rust',
-    '.go': 'Go',
-    '.gleam': 'Gleam',
-    '.html': 'HTML',
-    '.css': 'CSS',
-    '.py': 'Python',
-    '.yml': 'YAML',
-    '.yaml': 'YAML',
-    '.kts': 'Kotlin',
-    '.kt': 'Kotlin',
-    '.cpp': 'C++',
-    '.c': 'C',
-    '.cs': 'C#',
-    '.js': 'JavaScript',
-    '.java': 'Java',
-    '.tsx': 'TypeScript',
-    '.ts': 'TypeScript',
-    '.php': 'PHP',
-    '.sh': 'Shell',
-    '.lua': 'Lua',
 }
 
 COLORS = {
-    'Rust': '#dea584',
-    'Go': '#00ADD8',
-    'Gleam': '#ffaff3',
-    'HTML': '#e34c26',
-    'CSS': '#563d7c',
-    'Python': '#3572A5',
-    'YAML': '#cb171e',
-    'Kotlin': '#C711E1',
-    'C++': '#00599C',
-    'C': '#555555',
-    'C#': '#178600',
-    'JavaScript': '#f1e05a',
-    'Java': '#b07219',
-    'TypeScript': '#3178c6',
-    'PHP': '#4F5D95',
-    'Shell': '#89e051',
-    'Lua': '#000080'
 }
 
 
@@ -90,7 +54,9 @@ def get_repos():
 def plot_pie_chart(data):
     labels = list(data.keys())
     sizes = list(data.values())
-    colors = [COLORS[lang] for lang in labels]
+    colors = []
+    for label in labels:
+        colors.append(COLORS.get(label, 'gray'))
 
     explode = (0.1,) * len(data)
 
@@ -171,8 +137,24 @@ def compute_summary(repos):
     return summary
 
 
+def load_languages():
+    with open("languages.yml", "r") as f:
+        data = yaml.safe_load(f)
+
+        for lang in data:
+            extensions = data[lang].get("extensions")
+            if extensions:
+                for ext in extensions:
+                    # duplicates are ignored because they are usually just
+                    # variations of the same language
+                    LANGUAGES[ext] = lang
+                    if data[lang].get("color"):
+                        COLORS[lang] = data[lang].get("color")
+
+
 def main():
     try:
+        load_languages()
         summary = compute_summary(get_repos())
         logging.info(f"Summary: {summary}")
         plot_pie_chart(summary)
