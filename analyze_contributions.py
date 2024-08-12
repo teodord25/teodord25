@@ -79,10 +79,6 @@ def plot_pie_chart(data):
     plt.savefig(f'commit_distribution_week_{last_week_num}.png', bbox_inches='tight', transparent=True)
     plt.show()
 
-    old_file = f'commit_distribution_week_{old_week_num}.png'
-    if os.path.exists(old_file):
-        os.remove(old_file)
-
 
 def compute_summary(repos):
     summary = {}
