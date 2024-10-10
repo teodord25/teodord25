@@ -1,2 +1,2 @@
-![Weekly Commit Distribution Per Language](./commit_distribution_week_38.png)
+![Weekly Commit Distribution Per Language](./commit_distribution_week_39.png)
 ![Download Resume/CV](./cv-public.pdf)
