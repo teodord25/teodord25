@@ -108,8 +108,8 @@
 \begin{center}
     \textbf{\Huge \scshape Teodor \DJ{}urić} \\ \vspace{1pt}
     \small \href{mailto:djuric.teodor25@gmail.com}{\underline{djuric.teodor25@gmail.com}} $|$
-    \href{https://linkedin.com/in/teodor-djuric-008a28229}{\underline{linkedin.com/in/teodor-djuric-008a28229}} $|$
-
+    \href{https://www.linkedin.com/in/teodor-%C4%91uri%C4%87-008a28229/}{\underline{linkedin.com/in/teodor-\dj{}urić-008a28229}}
+    $|$
     \href{https://github.com/teodord25}{\underline{github.com/teodord25}}
 \end{center}
 
@@ -129,26 +129,31 @@
 
 
 \resumeSubheading
-  {Software Engineer}{Jul 2023 -- Present}
+  {Software Engineer}{Jul 2023 -- Dec 2024}
   {Soft-tronic}{Senta (Remote from Novi Sad)}
   \resumeItemListStart
 
-    \resumeItem{\textbf{Architected and implemented the SmartServe Framework}, leveraging inversion of control and dependency injection to create a scalable and maintainable modular architecture.}
+    \resumeItem{
+      \textbf{Architected and implemented SmartServe, a full-stack SSR framework,} leveraging inversion of control 
+      and dependency injection to ensure a modular, maintainable codebase.
+    }
 
     \resumeItem{\textbf{Collaborated} on various PHP projects, contributing code and assisting with development tasks.}
 
-    \resumeItem{\textbf{Mentored} an intern in coding skills and best practices, fostering a culture of knowledge sharing.}
+    \resumeItem{\textbf{Mentored} interns in coding skills and best practices, fostering a culture of knowledge sharing.}
 
     \resumeItem{\textbf{Spearheaded} the adoption of Git and GitHub within the company by pitching, preparing, and then delivering a presentation to the entire company on the benefits and usage of Git and GitHub.}
 
-    \resumeItem{\textbf{Created scripts} using Python to scrape the old website for photos and information, and utilized the WordPress API to automate the creation of posts, significantly reducing manual data transfer efforts.}
+    \resumeItem{\textbf{Created scripts} using Python to scrape the client's old website for photos and information, and utilized the WordPress API to automate the creation of posts, significantly reducing manual data transfer efforts.}
 
     \resumeItem{\textbf{Automated} the process of loading smartcard information into web forms on a website using C++ and a government API coupled with a minimal local server to serve generated JSON data to the website.}
 
+    \resumeItem{\textbf{Optimized} and cleaned up poorly designed and neglected databases.}
+
     \resumeItem{\textbf{Proactively addressed infrastructure needs} by taking on DevOps responsibilities.}
     \resumeItemListStart
-      \resumeItem{\textbf{Dockerized an existing project} supporting hundreds of heat pumps (bes.rs) consisting of microcontroller backends, app backends (BES Heat Pump Controller) and the administrative webpage.}
-      \resumeItem{\textbf{Configured and still maintain} the physical servers hosting the BES partner's software solutions.}
+      \resumeItem{\textbf{Dockerized existing projects} supporting hundreds of heat pumps (bes.rs) consisting of microcontroller backends, app backends (BES Heat Pump Controller) and the administrative webpage.}
+      \resumeItem{\textbf{Configured and maintained} the physical servers hosting the BES partner's software solutions.}
       \resumeItem{\textbf{Developed GitHub Actions workflows} that automatically deploy updates to servers over SSH upon detecting new tags, significantly reducing manual deployment efforts and minimizing downtime.}
     \resumeItemListEnd
 
@@ -162,19 +167,23 @@
   \resumeSubHeadingListStart
 
     \resumeProjectHeading
-        {\textbf{SmartServe Framework} $|$ \emph{Go, Echo, Docker, MySQL, GORM, Git, GitHub Actions}}{Feb 2024 -- Present}
+        {\textbf{SmartServe} $|$ \emph{Go, Echo, Docker, MySQL, GORM, Git, GitHub Actions}}{Feb 2024 -- Dec 2024}
         \resumeItemListStart
-          \resumeItem{\textbf{Designed and implemented} a flexible, decoupled architecture allowing for the reuse of components across various hospitality applications (e.g., SmartServe-Table, SmartServe-Hotel).}
-          \resumeItem{\textbf{Developed SmartServe-Core}, a central library providing essential functionalities like database management, authentication, and QR code generation.}
+
+          \resumeItem{
+            \textbf{Designed a flexible, decoupled architecture} that allowed component reuse across multiple projects, demonstrating the framework’s scalability and flexibility. (e.g., SmartServe-Table, SmartServe-Hotel)
+          }
+
+          \resumeItem{\textbf{Developed SmartServe-Core}, a central library providing essential functionalities.}
           \resumeItem{\textbf{Implemented inversion of control} by using dependency injection and defining clear interfaces, enabling the framework to manage application flow and enhance extensibility.}
           \resumeItem{\textbf{Optimized performance and scalability} by continuously reducing complexity where it isn't needed.}
           \resumeItem{\textbf{Automated testing and deployment} using GitHub Actions, ensuring code quality and streamlining CI/CD.}
         \resumeItemListEnd
 
     \resumeProjectHeading
-        {\textbf{SmartServe-Table (Food Plaza)} $|$ \emph{Go, SmartServe, Templ (Go), HTMX, JavaScript, HTML/CSS}}{May 2024 -- Present}
+        {\textbf{SmartServe-Table (Food Plaza)} $|$ \emph{Go, SmartServe, Templ (Go), HTMX, JavaScript, HTML/CSS}}{May 2024 -- Dec 2024}
         \resumeItemListStart
-          \resumeItem{\textbf{Developed a full-stack web application} for restaurant management using the SmartServe Framework.}
+          \resumeItem{\textbf{Developed a full-stack web application} for restaurant management using the SmartServe framework.}
           \resumeItem{\textbf{Engineered dynamic, responsive user interfaces} using HTMX reducing reliance on complex JavaScript.}
           \resumeItem{\textbf{Integrated QR code functionality} to enable seamless table ordering, enhancing customer experience.}
           \resumeItem{\textbf{Conducted end-to-end testing} with Selenium and Nix shell to ensure reliability and robustness.}
@@ -195,11 +204,11 @@
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}]
     \small{\item{
-     \textbf{Languages}{: Go, Python, Rust, JavaScript, PHP, HTML/CSS, Bash, Nushell, SQL, Lua, Nix, Java, C\#, C++} \\
+     \textbf{Languages}{: Go, Python, Rust, JavaScript, PHP, HTML/CSS, Bash, Java, C\#, C++, Nushell, SQL, Lua, Nix} \\
      \textbf{Frameworks}{: SmartServe (in-house custom), Echo (Go), Angular, WordPress} \\
-     \textbf{Developer Tools}{: Neovim/Vim/Vi, Docker, SSH, TMUX, Git, Github Actions, Nix Shell, VS Code} \\
-     \textbf{Libraries}{: HTMX, Templ, React} \\
-     \textbf{Technologies}{: Linux, NixOS, MySQL} \\
+     \textbf{Developer Tools}{: Neovim/Vim/Vi, Docker, SSH, TMUX, Git, Github Actions, Nix Shell, VS Code, Visual Studio} \\
+     \textbf{Libraries}{: HTMX, Templ, React, GORM} \\
+     \textbf{Technologies}{: Linux, MySQL, PostgreSQL, NixOS, Nix, LaTeX} \\
      \textbf{Natural Languages}{: Serbian (native), English (fluent), Hungarian (fluent)}
     }}
  \end{itemize}
