@@ -76,7 +76,7 @@ def plot_pie_chart(data):
     old_week_num = last_week_num - 1
 
     plt.title('Last week I used (commit distribution):', fontsize=14, fontweight='bold', color='white')
-    plt.savefig(f'commit_distribution_week_{last_week_num}.png', bbox_inches='tight', transparent=True)
+    plt.savefig(f'commit_distribution_week_{last_week_num:0>2}.png', bbox_inches='tight', transparent=True)
     plt.show()
 
 
