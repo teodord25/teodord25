@@ -1,0 +1,63 @@
+# Teodor Đurić - Resume Overview
+
+- Contact Information
+  - Email: djuric.teodor25@gmail.com
+  - LinkedIn: [teodor-đurić-008a28229](https://www.linkedin.com/in/teodor-%C4%91uri%C4%87-008a28229)
+  - GitHub: [teodord25](https://github.com/teodord25)
+
+- Education
+  - Institution: Faculty of Technical Sciences, Novi Sad, Serbia
+  - Degree: Bachelor's in Software Engineering and Information Technologies
+  - Duration: Jul. 2021 -- Present
+
+- Experience
+  - Software Engineer at Soft-tronic (Senta, Remote from Novi Sad)
+    - Duration: Jul 2023 -- Dec 2024
+    - Key Contributions:
+      - Architected and implemented *SmartServe*, a full-stack SSR framework leveraging inversion of control and dependency injection.
+      - Collaborated on various PHP projects and contributed code development.
+      - Mentored interns in coding skills and best practices.
+      - Spearheaded the adoption of Git and GitHub through company-wide presentations.
+      - Created Python scripts to scrape a client's old website and automated post creation via the WordPress API.
+      - Automated loading of smartcard information using C++ in combination with a government API and a local server.
+      - Optimized and refactored poorly designed databases.
+      - Assumed DevOps responsibilities by:
+        - Dockerizing projects (supporting hundreds of heat pumps) with microcontroller and app backends.
+        - Configuring and maintaining physical servers for BES partner solutions.
+        - Developing GitHub Actions workflows for automated deployment over SSH.
+
+- Selected Projects
+  - SmartServe
+    - Technologies: Go, Echo, Docker, MySQL, GORM, Git, GitHub Actions
+    - Duration: Feb 2024 -- Dec 2024
+    - Highlights:
+      - Designed a flexible, decoupled architecture enabling component reuse.
+      - Developed *SmartServe-Core* for essential functionalities.
+      - Implemented inversion of control through dependency injection.
+      - Optimized performance and scalability.
+      - Automated testing and deployment using GitHub Actions.
+  - SmartServe-Table (Food Plaza)
+    - Technologies: Go, SmartServe, Templ (Go), HTMX, JavaScript, HTML/CSS
+    - Duration: May 2024 -- Dec 2024
+    - Highlights:
+      - Developed a full-stack web application for restaurant management.
+      - Engineered dynamic, responsive user interfaces with HTMX.
+      - Integrated QR code functionality for seamless table ordering.
+      - Conducted end-to-end testing with Selenium and Nix shell.
+      - Implemented Git tags and semantic versioning for streamlined releases.
+  - Nebula
+    - Technologies: Rust
+    - Link: [github.com/drag0dev/nebula](https://github.com/drag0dev/nebula)
+    - Duration: Jul 2023 -- Sep 2023
+    - Highlights:
+      - Co-developed a key-value NoSQL database for a university project.
+  - Additional Projects
+    - GitHub Portfolio: [teodord25](https://github.com/teodord25)
+
+- Technical Skills
+  - Languages: Go, Python, Rust, JavaScript, PHP, HTML/CSS, Bash, Java, C#, C++, Nushell, SQL, Lua, Nix
+  - Frameworks: SmartServe (in-house), Echo (Go), Angular, WordPress
+  - Developer Tools: Neovim/Vim/Vi, Docker, SSH, TMUX, Git, GitHub Actions, Nix Shell, VS Code, Visual Studio
+  - Libraries: HTMX, Templ, React, GORM
+  - Technologies: Linux, MySQL, PostgreSQL, NixOS, Nix, LaTeX
+  - Natural Languages: Serbian (native), English (fluent), Hungarian (fluent)
