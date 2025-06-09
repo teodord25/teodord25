@@ -170,7 +170,7 @@ def plot_pie_chart(data):
             log.warning("Couldn’t delete %s: %s", prev_png, e)
 
     # now write the new chart
-    ax.set_title("Last week commit distribution", fontweight="bold")
+    ax.set_title("Last week commit distribution", fontsize=14, fontweight="bold", color='white')
     plt.savefig(this_png, bbox_inches="tight", transparent=True)
     plt.close(fig)   # tidy up the Matplotlib handle
 
