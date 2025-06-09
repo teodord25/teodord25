@@ -146,8 +146,12 @@ def plot_pie_chart(data):
     fig, ax = plt.subplots()
     wedges, _, autot = ax.pie(sizes, colors=colors, explode=explode,
                               autopct="%1.1f%%", shadow=True)
-    for t in autot:
-        t.set_color("white"), t.set_fontsize(8), t.set_fontweight("bold")
+
+    for autotext in autot:
+        autotext.set_color('white')
+        autotext.set_fontsize('10')
+        autotext.set_fontweight('bold')
+
     ax.axis("equal")
     ax.legend(wedges, [f"{l} ({v})" for l, v in data.items()],
               title="Languages", loc="center left", bbox_to_anchor=(1, .5))
