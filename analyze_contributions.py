@@ -25,12 +25,15 @@ COLORS = {
 URL_BASE = "https://api.github.com"
 USER = "teodord25"
 EMAIL = "djuric.teodor25@gmail.com"
-
 def is_mine(c):
-    return (
-        (c.get("author") and c["author"].get("login") == USER) or
-        c["commit"]["author"]["email"] == EMAIL
+    login_ok = any(
+        part and part.get("login") == USER
+        for part in (c.get("author"), c.get("committer"))
     )
+    noreply_ok = c["commit"]["author"]["email"].endswith("users.noreply.github.com") \
+                 and USER in c["commit"]["author"]["email"]
+    return login_ok or noreply_ok or c["commit"]["author"]["email"] == EMAIL
+
 
 def get_repos():
     logging.info("Starting to fetch repositories...")
