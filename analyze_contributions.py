@@ -26,6 +26,11 @@ URL_BASE = "https://api.github.com"
 USER = "teodord25"
 EMAIL = "djuric.teodor25@gmail.com"
 
+def is_mine(c):
+    return (
+        (c.get("author") and c["author"].get("login") == USER) or
+        c["commit"]["author"]["email"] == EMAIL
+    )
 
 def get_repos():
     logging.info("Starting to fetch repositories...")
@@ -99,11 +104,7 @@ def compute_summary(repos):
             continue
 
         for commit in response:
-            if (
-                commit is None or
-                isinstance(commit, str) or
-                commit["commit"]["author"]["email"] != EMAIL
-            ):
+            if not is_mine(commit):
                 continue
 
             sha = commit["sha"]
