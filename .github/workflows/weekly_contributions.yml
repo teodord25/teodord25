@@ -27,6 +27,17 @@ jobs:
           docker-compose build
           docker-compose up
 
+      - name: Update README.md image link to cache-bust
+        run: |
+          # current value (defaults to 0 if the pattern isn’t found yet)
+          CUR=$(grep -oE 'commit_distribution\.png\?beep-boop-[0-9]+' README.md \
+                | grep -oE '[0-9]+' | head -1)
+          CUR=${CUR:-0}
+          NEXT=$((CUR + 1))
+
+          # replace the old number with the incremented one
+          sed -i -E "s/(commit_distribution\.png\?beep-boop-)[0-9]+/\1${NEXT}/" README.md
+
       - name: Configure Git
         run: |
           git config http.sslVerify false
