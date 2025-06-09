@@ -156,8 +156,23 @@ def plot_pie_chart(data):
     ax.legend(wedges, [f"{l} ({v})" for l, v in data.items()],
               title="Languages", loc="center left", bbox_to_anchor=(1, .5))
 
+    week      = int(datetime.utcnow().strftime("%U")) - 1
+    this_png  = f"commit_distribution_week_{week:02}.png"
+
+    # ── NEW: delete the previous file if it exists ───────────────────────────
+    prev_week = (week - 1) % 52                      # wrap around New Year
+    prev_png  = f"commit_distribution_week_{prev_week:02}.png"
+    if os.path.exists(prev_png):
+        try:
+            os.remove(prev_png)
+            log.info("Deleted last week’s file %s", prev_png)
+        except OSError as e:
+            log.warning("Couldn’t delete %s: %s", prev_png, e)
+
+    # now write the new chart
     ax.set_title("Last week commit distribution", fontweight="bold")
-    plt.show()
+    plt.savefig(this_png, bbox_inches="tight", transparent=True)
+    plt.close(fig)   # tidy up the Matplotlib handle
 
 # ──────────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
