@@ -6,6 +6,19 @@ import os
 import yaml
 import matplotlib.pyplot as plt
 import logging
+import textwrap
+import pprint   # DEBUG pretty–print helpers
+
+# -----------------------------------------------------------------------------
+#  Debug configuration
+# -----------------------------------------------------------------------------
+DEBUG_MODE = os.getenv("DEBUG", "0") == "1"              # DEBUG
+_log_level  = logging.DEBUG if DEBUG_MODE else logging.INFO   # DEBUG
+logging.basicConfig(                                       # DEBUG
+    level=_log_level,                                      # DEBUG
+    format="%(asctime)s - %(levelname)s - %(message)s")    # DEBUG
+logger = logging.getLogger(__name__)                       # DEBUG
+# -----------------------------------------------------------------------------
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -25,36 +38,53 @@ COLORS = {
 URL_BASE = "https://api.github.com"
 USER = "teodord25"
 EMAIL = "djuric.teodor25@gmail.com"
+
+
+
+# -----------------------------------------------------------------------------
+#  Helper: decide whether a commit is mine
+# -----------------------------------------------------------------------------
 def is_mine(c):
-    login_ok = any(
-        part and part.get("login") == USER
-        for part in (c.get("author"), c.get("committer"))
+    """Return True if commit `c` should be counted as yours."""
+    # DEBUG capture as much author / committer info as possible
+    author_login    = c.get("author",    {}).get("login")
+    committer_login = c.get("committer", {}).get("login")
+    raw_email       = c["commit"]["author"]["email"]
+
+    login_ok    = USER in (author_login, committer_login)
+    noreply_ok  = raw_email.endswith("users.noreply.github.com") and USER in raw_email
+    explicit_ok = raw_email == EMAIL
+
+    verdict = login_ok or noreply_ok or explicit_ok                 # final answer
+
+    # DEBUG log *why* accepted / rejected
+    logger.debug(
+        "is_mine? %-5s | author=%s committer=%s email=%s",
+        verdict, author_login, committer_login, raw_email
     )
-    noreply_ok = c["commit"]["author"]["email"].endswith("users.noreply.github.com") \
-                 and USER in c["commit"]["author"]["email"]
-    return login_ok or noreply_ok or c["commit"]["author"]["email"] == EMAIL
+    return verdict
 
-
+# -----------------------------------------------------------------------------
+#  Fetch all repos the token can see
+# -----------------------------------------------------------------------------
 def get_repos():
-    logging.info("Starting to fetch repositories...")
-    repos = []
-    page = 1
+    logger.info("Fetching repositories …")
+    repos, page = [], 1
     while True:
         url = f"{URL_BASE}/user/repos?type=all&per_page=100&page={page}"
-        response = requests.get(url, headers=HEADERS).json()
-        if not response:  # check if the page is empty
-            logging.info(f"No more repos found at page {page}. Exiting...")
+        r   = requests.get(url, headers=HEADERS)
+        # DEBUG: dump rate-limit info every page
+        logger.debug("RateLimit remaining: %s", r.headers.get("X-RateLimit-Remaining"))
+        response = r.json()
+
+        if not response:                                            # empty page
+            logger.info("Page %d empty – done.", page)
             break
+
         for repo in response:
-            try:
-                owner = repo["owner"]["login"]
-            except Exception as e:
-                logging.info(f"Error: {e}")
-                logging.info(f"Response: {response}")
-                exit(1)
-            name = repo["name"]
+            owner, name = repo["owner"]["login"], repo["name"]
             repos.append((owner, name))
-        logging.info(f"Page {page}: {len(response)} repos found.")
+        logger.info("Page %d: %d repos", page, len(response))
         page += 1
     return repos
 
@@ -88,80 +118,82 @@ def plot_pie_chart(data):
     plt.show()
 
 
+# -----------------------------------------------------------------------------
+#  Crunch commits
+# -----------------------------------------------------------------------------
 def compute_summary(repos):
-    summary = {}
-    seven_days_ago = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    logging.info(f"Computing summary for commits since {seven_days_ago}...")
+    summary       = {}
+    seven_days_ago = (datetime.utcnow() - timedelta(days=7)).isoformat(timespec="seconds") + "Z"
+    logger.info("Analysing commits since %s …", seven_days_ago)
 
     for owner, name in repos:
-        if name == ".github-private" or name == ".github":
+        if name in {".github", ".github-private"}:
             continue
 
-        url = f"{URL_BASE}/repos/{owner}/{name}/commits?since={seven_days_ago}"
-        response = requests.get(url, headers=HEADERS).json()
+        # ask GitHub to filter by author on the server side – fewer bytes to parse
+        params = dict(since=seven_days_ago, author=USER, per_page=100)      # DEBUG
+        url    = f"{URL_BASE}/repos/{owner}/{name}/commits"
+        commits = requests.get(url, headers=HEADERS, params=params).json()
 
-        if response == []:
+        logger.debug("Repo %-30s → %3d candidate commits", f"{owner}/{name}", len(commits))  # DEBUG
+        if not commits or isinstance(commits, dict):
             continue
 
-        if isinstance(response, dict):
-            continue
-
-        for commit in response:
-            if not is_mine(commit):
+        for c in commits:
+            sha = c["sha"][:7]
+            if not is_mine(c):
+                logger.debug("• skip %s (not mine)", sha)
                 continue
 
-            sha = commit["sha"]
-            url = f"{URL_BASE}/repos/{owner}/{name}/commits/{sha}"
-            response = requests.get(
-                url, headers=HEADERS, allow_redirects=True
-            ).json()
-            files = response.get("files", [])
+            # full commit (get added / deleted lines, list of files, etc.)
+            full = requests.get(f"{url}/{sha}", headers=HEADERS).json()
+            files = full.get("files", [])
+            logger.debug("• keep %s – %d files", sha, len(files))
 
             languages_in_commit = set()
+            for f in files:
+                ext = os.path.splitext(f["filename"])[1]
+                lang = LANGUAGES.get(ext)
+                if not lang:
+                    # DEBUG surface unmapped extensions once
+                    if DEBUG_MODE and ext not in ("", None):
+                        logger.debug("  └─ unmapped ext %s in %s", ext, f["filename"])
+                    continue
+                languages_in_commit.add(lang)
 
-            for file in files:
-                extension = os.path.splitext(file["filename"])[1]
-                language = LANGUAGES.get(extension)
+            if DEBUG_MODE:
+                logger.debug("  └─ languages in commit: %s", languages_in_commit)
 
-                if language:
-                    languages_in_commit.add(language)
+            for lang in languages_in_commit:
+                summary[lang] = summary.get(lang, 0) + 1
 
-            for language in languages_in_commit:
-                if language in summary:
-                    summary[language] += 1
-                else:
-                    summary[language] = 1
-
-        logging.info(f"Current summary: {summary}")
-
-    logging.info("Summary of languages used: {summary}")
+    logger.info("Current summary: %s", summary)
     return summary
 
-
+# -----------------------------------------------------------------------------
+#  Load GitHub Linguist map
+# -----------------------------------------------------------------------------
 def load_languages():
-    with open("languages.yml", "r") as f:
-        data = yaml.safe_load(f)
+    with open("languages.yml") as fh:
+        data = yaml.safe_load(fh)
 
-        for lang in data:
-            extensions = data[lang].get("extensions")
-            if extensions:
-                for ext in extensions:
-                    # duplicates are ignored because they are usually just
-                    # variations of the same language
-                    LANGUAGES[ext] = lang
-                    if data[lang].get("color"):
-                        COLORS[lang] = data[lang].get("color")
+    for lang, spec in data.items():
+        for ext in spec.get("extensions", []) or []:
+            LANGUAGES[ext] = lang
+        if spec.get("color"):
+            COLORS[lang] = spec["color"]
+
+    # DEBUG – sanity-check critical mappings
+    for critical in (".rs", ".svg", ".wgsl"):
+        logger.debug("LANG map %4s → %s", critical, LANGUAGES.get(critical))
+
+# -----------------------------------------------------------------------------
 
 
 def main():
-    try:
-        load_languages()
-        summary = compute_summary(get_repos())
-        logging.info(f"Summary: {summary}")
-        plot_pie_chart(summary)
-    except Exception as e:
-        logging.info(f"Error: {e}")
-        exit(1)
+    load_languages()
+    summary = compute_summary(get_repos())
+    plot_pie_chart(summary)
 
 
 if __name__ == "__main__":
