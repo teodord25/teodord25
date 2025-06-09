@@ -156,10 +156,7 @@ def plot_pie_chart(data):
     ax.legend(wedges, [f"{l} ({v})" for l, v in data.items()],
               title="Languages", loc="center left", bbox_to_anchor=(1, .5))
 
-    week = int(datetime.utcnow().strftime("%U")) - 1
     ax.set_title("Last week commit distribution", fontweight="bold")
-    plt.savefig(f"commit_distribution_week_{week:02}.png",
-                bbox_inches="tight", transparent=True)
     plt.show()
 
 # ──────────────────────────────────────────────────────────────────────────────
