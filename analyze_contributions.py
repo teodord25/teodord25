@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # ── Logging: force DEBUG for everything ───────────────────────────────────────
 logging.basicConfig(
-    level=logging.DEBUG,                                   # <- hard-wired DEBUG
+    level=logging.INFO,                                   # <- hard-wired DEBUG
     format="%(asctime)s  %(levelname)-7s  %(message)s")
 log = logging.getLogger(__name__)
 
