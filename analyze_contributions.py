@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 import os, requests, yaml, logging, pprint
 import matplotlib.pyplot as plt
+from collections import Counter
 
 # ── Logging: force DEBUG for everything ───────────────────────────────────────
 logging.basicConfig(
@@ -97,11 +98,26 @@ def compute_summary(repos):
     since = (datetime.utcnow() - timedelta(days=7)).isoformat(timespec="seconds") + "Z"
     log.info("Scanning commits since %s", since)
 
-    summary = {}
+    summary = Counter()
+    seen_shas = set()
     for owner, name in repos:
         if name in {".github", ".github-private"}:
             continue
 
+        page = 1
+        while True:
+            commits = fetch(
+                f"{URL_BASE}/repos/{owner}/{name}/commits",
+                params={"since": since, "per_page": 100, "page": page},
+            )
+            if not commits:
+                break
+            page += 1;
+
+        if not isinstance(commits, list):
+            continue
+        log.debug("%s/%s p.%d -> %3d commits", owner, name, page - 1, len(commits))
+        
         commits = fetch(f"{URL_BASE}/repos/{owner}/{name}/commits",
                         params={"since": since, "per_page": 100})
 
@@ -113,8 +129,13 @@ def compute_summary(repos):
             if not is_mine(c):
                 continue
 
-            sha   = c["sha"]
-            full  = fetch(f"{URL_BASE}/repos/{owner}/{name}/commits/{sha}")
+            sha = c["sha"]
+            if sha in seen_shas:
+                log.debug("dup-skip &s...", sha[:7])
+                continue
+            seen_shas.add(sha)
+            
+            full = fetch(f"{URL_BASE}/repos/{owner}/{name}/commits/{sha}")
             files = full.get("files", [])
 
             langs = set()
@@ -127,10 +148,10 @@ def compute_summary(repos):
                         log.debug("Rust file %s in %s…", f["filename"], sha[:7])
 
             for lang in langs:
-                summary[lang] = summary.get(lang, 0) + 1
+                summary[lang] += 1
 
-    log.info("FINAL SUMMARY: %s", summary)
-    return summary
+    log.info("FINAL SUMMARY: %s", dict(summary))
+    return dict(summary)
 
 # ──────────────────────────────────────────────────────────────────────────────
 def plot_pie_chart(data):
