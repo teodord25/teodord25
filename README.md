@@ -1,4 +1,4 @@
-![Weekly Commit Distribution Per Language](./commit_distribution.png?beep-boop-5)
+![Weekly Commit Distribution Per Language](./commit_distribution.png?beep-boop-6)
 
 ![Resume / CV](./cv-master.pdf)
 
