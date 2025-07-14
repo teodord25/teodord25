@@ -35,6 +35,31 @@
 #
 # Please keep this list alphabetized. Capitalization comes before lowercase.
 ---
+
+# Custom stuff
+Systemd:
+  type: data
+  color: "#f5962e"
+  extensions:
+    - ".automount"
+    - ".device"
+    - ".mount"
+    - ".netdev"
+    - ".path"
+    - ".scope"
+    - ".service"
+    - ".slice"
+    - ".socket"
+    - ".swap"
+    - ".target"
+    - ".timer"
+  tm_scope: "source.ini"
+  ace_mode: "ini"
+  codemirror_mode: "properties"
+  codemirror_mime_type: "text/x-properties"
+  language_id: 900000000
+
+
 1C Enterprise:
   type: programming
   color: "#814CCC"
@@ -114,15 +139,6 @@ AL:
   tm_scope: source.al
   ace_mode: text
   language_id: 658971832
-AMPL:
-  type: programming
-  color: "#E6EFBB"
-  extensions:
-  - ".ampl"
-  - ".mod"
-  tm_scope: source.ampl
-  ace_mode: text
-  language_id: 3
 ANTLR:
   type: programming
   color: "#9DC3FF"
