@@ -3829,13 +3829,6 @@ Linker Script:
   tm_scope: none
   ace_mode: text
   language_id: 202
-Linux Kernel Module:
-  type: data
-  extensions:
-  - ".mod"
-  tm_scope: none
-  ace_mode: text
-  language_id: 203
 Liquid:
   type: markup
   color: "#67b8de"
@@ -4322,14 +4315,6 @@ Modelica:
   codemirror_mode: modelica
   codemirror_mime_type: text/x-modelica
   language_id: 233
-Modula-2:
-  type: programming
-  color: "#10253f"
-  extensions:
-  - ".mod"
-  tm_scope: source.modula2
-  ace_mode: text
-  language_id: 234
 Modula-3:
   type: programming
   extensions:
@@ -4489,14 +4474,6 @@ NL:
   tm_scope: none
   ace_mode: text
   language_id: 241
-NMODL:
-  type: programming
-  color: "#00356B"
-  extensions:
-  - ".mod"
-  tm_scope: none
-  ace_mode: text
-  language_id: 136456478
 NPM Config:
   type: data
   color: "#cb3837"
@@ -7827,7 +7804,6 @@ XML:
   - ".mdpolicy"
   - ".mjml"
   - ".mm"
-  - ".mod"
   - ".mojo"
   - ".mxml"
   - ".natvis"
