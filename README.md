@@ -88,7 +88,7 @@ Status: Active development - working through async Rust concurrency patterns and
 
 ## 🤝 Open to Opportunities
 
-I'm actively seeking **backend engineering roles** where I can work with:
+I'm open to **backend engineering roles** where I can work with:
 - **Go** or **Rust** backend systems
 - Concurrent/parallel processing
 - Distributed systems
